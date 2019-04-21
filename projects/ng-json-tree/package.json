@@ -1,6 +1,17 @@
 {
-  "name": "ng-json-tree",
-  "version": "0.0.1",
+  "name": "@richapps/ng-json-tree",
+  "version": "0.0.2",
+  "description": "Simple angular tree component",
+  "author": {
+    "name": "Benjamin Dobler",
+    "email": "benz@richapps.de",
+    "url": "http://www.richapps.de"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BenjaminDobler/ng-json-tree"
+  },
+  "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^7.1.0",
     "@angular/core": "^7.1.0"
