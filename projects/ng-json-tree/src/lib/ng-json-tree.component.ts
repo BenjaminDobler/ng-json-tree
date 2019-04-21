@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChildren, QueryList } from "@angular/core";
+import { Component, Input, OnInit, ViewChildren, QueryList, HostBinding } from "@angular/core";
 
 @Component({
   selector: "ng-json-tree",
@@ -14,6 +14,20 @@ export class NgJsonTreeComponent implements OnInit {
 
   @Input()
   parent: any;
+
+  @Input()
+  showObjectPreview = true;
+
+  @Input()
+  public set level(value) {
+    this._level = value;
+  }
+
+  public get level() {
+    return this._level;
+  }
+
+  private _level = 0;
 
   @ViewChildren(NgJsonTreeComponent) viewChildren!: QueryList<NgJsonTreeComponent>;
 
@@ -57,5 +71,20 @@ export class NgJsonTreeComponent implements OnInit {
         c.expandAll();
       });
     }, 10);
+  }
+
+  getObjectPreview(data) {
+    return JSON.stringify(data);
+  }
+
+  @HostBinding("style.backgroundColor") get backgroundColor() {
+    const col = this.lightenDarkenColor("#ffffff", this.level * -1);
+    console.log(col + "  Level ", this.level);
+    return col;
+  }
+
+  lightenDarkenColor(col, amt) {
+    col = parseInt(col, 16);
+    return (((col & 0x0000ff) + amt) | ((((col >> 8) & 0x00ff) + amt) << 8) | (((col >> 16) + amt) << 16)).toString(16);
   }
 }
