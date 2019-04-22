@@ -77,14 +77,11 @@ export class NgJsonTreeComponent implements OnInit {
     return JSON.stringify(data);
   }
 
+  /*
   @HostBinding("style.backgroundColor") get backgroundColor() {
     const col = this.lightenDarkenColor("#ffffff", this.level * -1);
     console.log(col + "  Level ", this.level);
     return col;
   }
-
-  lightenDarkenColor(col, amt) {
-    col = parseInt(col, 16);
-    return (((col & 0x0000ff) + amt) | ((((col >> 8) & 0x00ff) + amt) << 8) | (((col >> 16) + amt) << 16)).toString(16);
-  }
+  */
 }
