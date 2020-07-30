@@ -1,7 +1,7 @@
 <ng-container *ngIf="isObject">
-  <span class="arrow" [class.right]="!expanded" [class.down]="expanded"></span>
+  <span class="arrow" (click)="toggleExpand()" [class.right]="!expanded" [class.down]="expanded"></span>
   <a href="#" *ngIf="key" (click)="toggleExpand()" (dblclick)="expandAll()">{{ key }}:</a>
-  <a (click)="toggleExpand()" style="margin-left: 5px" (dblclick)="expandAll()" *ngIf="data !== null">object</a>
+  <a (click)="toggleExpand()" style="margin-left: 5px" class="type" (dblclick)="expandAll()" *ngIf="data !== null">object</a>
   <span *ngIf="data === null" class="property">null</span>
 
   <ng-container *ngIf="expanded">
@@ -9,13 +9,13 @@
   </ng-container>
 
   <ng-container *ngIf="!expanded && showObjectPreview">
-    <span class="preview">{{ getObjectPreview(data) }}</span>
+    <span (click)="toggleExpand()" class="preview">{{ getObjectPreview(data) }}</span>
   </ng-container>
 </ng-container>
 
 <ng-container *ngIf="isArray">
   <span (click)="toggleExpand()" (dblclick)="expandAll()">
-    <span class="property">{{ key }}</span> array ({{ data.length }})</span
+    <span class="property">{{ key }}</span> <span class="type">array ({{ data.length }})</span></span
   >
 
   <ng-container *ngIf="expanded">
@@ -25,5 +25,5 @@
 
 <ng-container *ngIf="isPrimitive">
   <span class="property">{{ key }}</span
-  >: {{ data }}
+  >: <span class="value">{{ data }}</span>
 </ng-container>

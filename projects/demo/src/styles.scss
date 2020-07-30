@@ -1,0 +1,24 @@
+/* You can add global styles to this file, and also import other style files */
+
+[override] ng-json-tree {
+  &.tree1 {
+    a {
+      color: red;
+      font-size: 20px;
+    }
+    .property {
+      color: red;
+      font-size: 20px;
+    }
+
+    .value {
+      color: green;
+      font-size: 20px;
+    }
+
+    .preview {
+      color: pink;
+      font-size: 20px;
+    }
+  }
+}

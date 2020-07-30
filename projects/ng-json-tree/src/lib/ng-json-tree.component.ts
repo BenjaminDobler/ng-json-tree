@@ -1,9 +1,18 @@
-import { Component, Input, OnInit, ViewChildren, QueryList, HostBinding } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChildren,
+  QueryList,
+  HostBinding,
+  ViewEncapsulation,
+} from "@angular/core";
 
 @Component({
   selector: "ng-json-tree",
   templateUrl: "./ng-json-tree.component.html",
-  styleUrls: ["./ng-json-tree.component.scss"]
+  styleUrls: ["./ng-json-tree.component.scss"],
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class NgJsonTreeComponent implements OnInit {
   @Input()
@@ -19,6 +28,9 @@ export class NgJsonTreeComponent implements OnInit {
   showObjectPreview = true;
 
   @Input()
+  initialExpand = false;
+
+  @Input()
   public set level(value) {
     this._level = value;
   }
@@ -29,7 +41,9 @@ export class NgJsonTreeComponent implements OnInit {
 
   private _level = 0;
 
-  @ViewChildren(NgJsonTreeComponent) viewChildren!: QueryList<NgJsonTreeComponent>;
+  @ViewChildren(NgJsonTreeComponent) viewChildren!: QueryList<
+    NgJsonTreeComponent
+  >;
 
   isArray = false;
 
@@ -45,12 +59,19 @@ export class NgJsonTreeComponent implements OnInit {
 
   ngOnInit() {
     if (Number(this.key) !== 0 && !this.key) {
-      this.isObject = typeof this.data === "object" && !Array.isArray(this.data);
+      console.log("isRoot?");
+      if (this.initialExpand) {
+        this.expandAll();
+      }
+      // this.expandAll();
+      this.isObject =
+        typeof this.data === "object" && !Array.isArray(this.data);
       this.isArray = Array.isArray(this.data);
       this.isPrimitive = !this.isObject && !this.isArray;
     } else {
       this.data = this.parent[this.key];
-      this.isObject = typeof this.data === "object" && !Array.isArray(this.data);
+      this.isObject =
+        typeof this.data === "object" && !Array.isArray(this.data);
       this.isArray = Array.isArray(this.data);
       this.isPrimitive = !this.isObject && !this.isArray;
     }
@@ -70,7 +91,7 @@ export class NgJsonTreeComponent implements OnInit {
       this.viewChildren.toArray().forEach((c: NgJsonTreeComponent) => {
         c.expandAll();
       });
-    }, 10);
+    }, 0);
   }
 
   getObjectPreview(data) {
