@@ -1,7 +1,7 @@
 <ng-container *ngIf="isObject">
   <span class="arrow" (click)="toggleExpand()" [class.right]="!expanded" [class.down]="expanded"></span>
-  <a href="#" *ngIf="key" (click)="toggleExpand()" (dblclick)="expandAll()">{{ key }}:</a>
-  <a (click)="toggleExpand()" style="margin-left: 5px" class="type" (dblclick)="expandAll()" *ngIf="data !== null">object</a>
+  <span *ngIf="key" (click)="toggleExpand()" (dblclick)="expandAll()">{{ key }}:</span>
+  <span (click)="toggleExpand()" style="margin-left: 5px" class="type" (dblclick)="expandAll()" *ngIf="data !== null">object</span>
   <span *ngIf="data === null" class="property">null</span>
 
   <ng-container *ngIf="expanded">
