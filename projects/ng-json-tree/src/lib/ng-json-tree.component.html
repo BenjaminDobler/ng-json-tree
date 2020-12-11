@@ -1,28 +1,70 @@
+<!-- Object -->
 <ng-container *ngIf="isObject">
-  <span class="arrow" (click)="toggleExpand()" [class.right]="!expanded" [class.down]="expanded"></span>
-  <span *ngIf="key" (click)="toggleExpand()" (dblclick)="expandAll()">{{ key }}:</span>
-  <span (click)="toggleExpand()" style="margin-left: 5px" class="type" (dblclick)="expandAll()" *ngIf="data !== null">object</span>
+  <span
+    class="arrow"
+    (dblclick)="dbClick()"
+    (singleClick)="click()"
+    [class.right]="!expanded"
+    [class.down]="expanded"
+  ></span>
+  <span *ngIf="key" (dblclick)="dbClick()" (singleClick)="click()"
+    >{{ key }}:</span
+  >
+  <span
+    (dblclick)="dbClick()"
+    (singleClick)="click()"
+    style="margin-left: 5px"
+    class="type"
+    *ngIf="data !== null"
+    >Object</span
+  >
   <span *ngIf="data === null" class="property">null</span>
 
   <ng-container *ngIf="expanded">
-    <ng-json-tree *ngFor="let key of keys" [level]="level + 1" [showObjectPreview]="showObjectPreview" [parent]="data" [key]="key"></ng-json-tree>
+    <ng-json-tree
+      *ngFor="let key of keys"
+      [level]="level + 1"
+      [showObjectPreview]="showObjectPreview"
+      [data]="data[key]"
+      [key]="key"
+      [control]="control[key]"
+    ></ng-json-tree>
   </ng-container>
 
   <ng-container *ngIf="!expanded && showObjectPreview">
-    <span (click)="toggleExpand()" class="preview">{{ getObjectPreview(data) }}</span>
+    <span (dblclick)="dbClick()" (singleClick)="click()" class="preview">{{
+      getObjectPreview(data)
+    }}</span>
   </ng-container>
 </ng-container>
 
+<!-- Array -->
 <ng-container *ngIf="isArray">
-  <span (click)="toggleExpand()" (dblclick)="expandAll()">
-    <span class="property">{{ key }}</span> <span class="type">array ({{ data.length }})</span></span
-  >
+  <span
+    class="arrow"
+    ((dblclick)="dbClick()"
+    (singleClick)="click()"
+    [class.right]="!expanded"
+    [class.down]="expanded"
+  ></span>
 
+  <span (dblclick)="dbClick()" (singleClick)="click()">
+    <span class="property">{{ key }}</span>
+    <span class="type"> Array ({{ data.length }})</span>
+  </span>
   <ng-container *ngIf="expanded">
-    <ng-json-tree *ngFor="let key of data; index as i" [level]="level + 1" [showObjectPreview]="showObjectPreview" [parent]="data" [key]="i"></ng-json-tree>
+    <ng-json-tree
+      [control]="control[i]"
+      *ngFor="let k of data; index as i"
+      [level]="level + 1"
+      [showObjectPreview]="showObjectPreview"
+      [data]="data[i]"
+      [key]="i"
+    ></ng-json-tree>
   </ng-container>
 </ng-container>
 
+<!-- Primitive -->
 <ng-container *ngIf="isPrimitive">
   <span class="property">{{ key }}</span
   >: <span class="value">{{ data }}</span>

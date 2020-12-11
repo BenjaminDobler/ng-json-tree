@@ -1,12 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChildren,
-  QueryList,
-  HostBinding,
-  ViewEncapsulation,
-} from "@angular/core";
+import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 
 @Component({
   selector: "ng-json-tree",
@@ -15,8 +7,39 @@ import {
   encapsulation: ViewEncapsulation.Emulated,
 })
 export class NgJsonTreeComponent implements OnInit {
+  private _data: any;
+
+  private isRoot = false;
+
+  public get data(): any {
+    return this._data;
+  }
+
   @Input()
-  data: any;
+  public set data(value: any) {
+    this._data = value;
+    if (this.isRoot) {
+      this.control = JSON.parse(JSON.stringify(this.data));
+      if (this.initialExpand) {
+        this.setChildsProp("expanded", true);
+      }
+    }
+    if (Number(this.key) !== 0 && !this.key) {
+      this.isObject =
+        typeof this.data === "object" && !Array.isArray(this.data);
+      this.isArray = Array.isArray(this.data);
+      this.isPrimitive = !this.isObject && !this.isArray;
+    } else {
+      this.isObject =
+        typeof this.data === "object" && !Array.isArray(this.data);
+      this.isArray = Array.isArray(this.data);
+      this.isPrimitive = !this.isObject && !this.isArray;
+    }
+
+    if (this.isObject && this.data !== null) {
+      this.keys = Object.keys(this.data);
+    }
+  }
 
   @Input()
   key: string;
@@ -41,68 +64,93 @@ export class NgJsonTreeComponent implements OnInit {
 
   private _level = 0;
 
-  @ViewChildren(NgJsonTreeComponent) viewChildren!: QueryList<
-    NgJsonTreeComponent
-  >;
-
   isArray = false;
 
   isObject = false;
 
   isPrimitive = false;
 
+  @Input()
+  control: any = {};
+
   keys: Array<any> = [];
 
-  public expanded = false;
+  @Input()
+  private _expanded = false;
+  public get expanded() {
+    if (this.control) {
+      return this.control.expanded;
+    }
+    return false;
+  }
 
   constructor() {}
 
   ngOnInit() {
     if (Number(this.key) !== 0 && !this.key) {
-      console.log("isRoot?");
-      if (this.initialExpand) {
-        this.expandAll();
+      this.isRoot = true;
+      if (this.data) {
+        this.control = JSON.parse(JSON.stringify(this.data));
       }
-      // this.expandAll();
-      this.isObject =
-        typeof this.data === "object" && !Array.isArray(this.data);
-      this.isArray = Array.isArray(this.data);
-      this.isPrimitive = !this.isObject && !this.isArray;
-    } else {
-      this.data = this.parent[this.key];
-      this.isObject =
-        typeof this.data === "object" && !Array.isArray(this.data);
-      this.isArray = Array.isArray(this.data);
-      this.isPrimitive = !this.isObject && !this.isArray;
     }
-
-    if (this.isObject && this.data !== null) {
-      this.keys = Object.keys(this.data);
+    if (this.initialExpand) {
+      this.setChildsProp("expanded", true);
     }
   }
 
-  toggleExpand() {
-    this.expanded = !this.expanded;
-  }
-
-  expandAll() {
-    this.expanded = !this.expanded;
-    setTimeout(() => {
-      this.viewChildren.toArray().forEach((c: NgJsonTreeComponent) => {
-        c.expandAll();
-      });
-    }, 0);
+  toggleExpand(event) {
+    this.control.expanded = !this.control.expanded;
   }
 
   getObjectPreview(data) {
     return JSON.stringify(data);
   }
 
-  /*
-  @HostBinding("style.backgroundColor") get backgroundColor() {
-    const col = this.lightenDarkenColor("#ffffff", this.level * -1);
-    console.log(col + "  Level ", this.level);
-    return col;
+  click() {
+    if (this.control) {
+      this.control.expanded = !this.control.expanded;
+    }
   }
-  */
+
+  dbClick() {
+    if (this.allChildsExpanded()) {
+      this.setChildsProp("expanded", false);
+    } else {
+      this.setChildsProp("expanded", true);
+    }
+  }
+
+  setChildsProp(prop, value) {
+    const iterate = (obj) => {
+      for (const property in obj) {
+        if (obj.hasOwnProperty(property)) {
+          if (typeof obj[property] === "object" && obj[property]) {
+            obj[property][prop] = value;
+            iterate(obj[property]);
+          }
+        }
+      }
+    };
+    this.control.expanded = true;
+    iterate(this.control);
+  }
+
+  allChildsExpanded() {
+    const prop = "expanded";
+    const value = true;
+    let res = true;
+    const iterate = (obj) => {
+      for (const property in obj) {
+        if (obj.hasOwnProperty(property)) {
+          if (typeof obj[property] === "object" && obj[property]) {
+            res = res && obj[property][prop] === true;
+            iterate(obj[property]);
+          }
+        }
+      }
+    };
+    this.control.expanded = true;
+    iterate(this.control);
+    return res;
+  }
 }

@@ -1,4 +1,9 @@
-<ng-json-tree class="tree1" [initialExpand]="true" [data]="data" [showObjectPreview]="true"></ng-json-tree>
 
-<ng-json-tree class="tree2" [data]="data" [showObjectPreview]="true"></ng-json-tree>
+<button (click)="data=testData1">Set Data Source 1</button>
+<button (click)="data=testData2">Set Data Source 2</button>
+
+
+<ng-json-tree [initialExpand]="true" [data]="data" [showObjectPreview]="true"></ng-json-tree>
+
+<!-- <ng-json-tree class="tree1" [initialExpand]="false" [data]="data" [showObjectPreview]="true"></ng-json-tree> -->
 

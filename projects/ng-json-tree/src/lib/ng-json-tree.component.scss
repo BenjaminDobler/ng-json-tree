@@ -4,10 +4,30 @@
   font-family: monospace;
   overflow: hidden;
   white-space: nowrap;
+
+  box-sizing: border-box;
+  color: rgb(136, 19, 145);
+  cursor: default;
+  flex-shrink: 0;
+  font-family: Menlo, monospace;
+  font-size: 11px;
+  height: auto;
+  line-height: 16px;
+  list-style-type: none;
+  min-height: 0px;
+  min-width: 0px;
+  overflow-wrap: break-word;
+  tab-size: 4;
+  text-align: left;
+  user-select: text;
 }
 
 .property {
-  color: #0075ff;
+  color: rgb(136, 19, 145);;
+}
+
+.value {
+  color:rgb(196, 26, 22);
 }
 
 .preview {
